@@ -17,6 +17,7 @@ module.exports={
 		if(options===undefined)options={};
 		if(options.phantomPath===undefined)options.phantomPath='phantomjs';
 		if(options.parameters===undefined)options.parameters={};
+		if(options.env===undefined)options.env=process.env;
 
 		function spawnPhantom(port,callback){
 			var args=[];
@@ -25,7 +26,8 @@ module.exports={
 			}
 			args=args.concat([__dirname + '/bridge.js', port]);
 
-			var phantom=child.spawn(options.phantomPath,args);
+            var phantomOptions = { 'env': options.env };
+			var phantom=child.spawn(options.phantomPath,args,phantomOptions);
 			phantom.stdout.on('data',function(data){
 				return console.log('phantom stdout: '+data);
 			});
